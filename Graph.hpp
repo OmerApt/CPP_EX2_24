@@ -17,6 +17,8 @@ namespace ariel
         bool graph_loaded;
         // for initilazing graph
         void setedge(unsigned int a, unsigned int b, int value);
+        bool __is_exact_equal(const Graph &g2) const;
+        bool __contained_in(const Graph &g2) const;
 
     public:
         Graph()
@@ -32,23 +34,36 @@ namespace ariel
         // copy load
         void loadGraph(Graph g);
         void printGraph() const;
+        string create_graph_string(int dummy);
         // return the edge from a to b if exists else return 0
         int getedge(unsigned int row, unsigned int collumn) const;
         unsigned int get_num_of_nodes() const
         {
             return this->nodes_num;
         }
-        // binary + -
+        friend ostream &operator<<(ostream &os, const Graph &g);
+        // arithmetic
         friend Graph operator+(const Graph &g1, const Graph &g2);
         friend Graph operator-(const Graph &g1, const Graph &g2);
         Graph &operator+=(const Graph &g2);
         Graph &operator-=(const Graph &g2);
-        Graph operator*(int scalar);
+        friend Graph operator*(const Graph &g1, int scalar);
+        friend Graph &operator*=( Graph &g1, int scalar);
+        friend Graph operator/(const Graph &g1, int scalar);
+        friend Graph &operator/=(Graph &g1, int scalar);
+        friend Graph operator*(const Graph &g1, const Graph &g2);
+        friend Graph &operator*=(Graph &g1, const Graph &g2);
         Graph &operator++(int dummy_flag);
-         Graph &operator--(int dummy_flag);
-        // unary + -
+        Graph &operator--(int dummy_flag);
+        // unary
         friend Graph operator+(const Graph &g1);
         friend Graph operator-(const Graph &g1);
+        // logical
+        friend bool operator<(const Graph &g1, const Graph &g2);
+        friend bool operator<=(const Graph &g1, const Graph &g2);
+        friend bool operator>(const Graph &g1, const Graph &g2);
+        friend bool operator>=(const Graph &g1, const Graph &g2);
+        friend bool operator==(const Graph &g1, const Graph &g2);
     };
 
 } // namespace ariel

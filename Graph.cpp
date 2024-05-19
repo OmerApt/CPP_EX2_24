@@ -8,7 +8,7 @@
 using namespace std;
 namespace ariel
 {
-
+    
     void Graph::loadGraph(vector<vector<int>> g)
     {
         unsigned int nodes = g.size();
@@ -78,6 +78,43 @@ namespace ariel
         this->actual_graph[this->nodes_num * a + b] = value;
     }
 
+    bool Graph::__is_exact_equal(const Graph &g2) const
+    {
+        uint number_of_nodes = this->get_num_of_nodes();
+        if (number_of_nodes != g2.get_num_of_nodes())
+            return false;
+        for (uint row = 0; row < number_of_nodes; row++)
+        {
+            for (uint col = 0; col < number_of_nodes; col++)
+            {
+                if (this->getedge(row, col) != g2.getedge(row, col))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool Graph::__contained_in(const Graph &g2) const
+    {
+        uint number_of_nodes = this->get_num_of_nodes();
+        if (number_of_nodes > g2.get_num_of_nodes())
+            return false;
+
+        for (uint row = 0; row < number_of_nodes; row++)
+        {
+            for (uint col = 0; col < number_of_nodes; col++)
+            {
+                if (this->getedge(row, col) != g2.getedge(row, col))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     int Graph::getedge(unsigned int row, unsigned int collumn) const
     {
         // need to check if parameters in range for safer code
@@ -132,15 +169,15 @@ namespace ariel
         return *this;
     }
 
-    Graph Graph::operator*(int scalar)
+    Graph operator*(const Graph &g1,int scalar)
     {
-        uint number_of_nodes = this->nodes_num;
+        uint number_of_nodes = g1.get_num_of_nodes();
         Graph g_res{number_of_nodes};
         for (uint row = 0; row < number_of_nodes; row++)
         {
             for (uint col = 0; col < number_of_nodes; col++)
             {
-                int new_val = this->getedge(row, col) * scalar;
+                int new_val = g1.getedge(row, col) * scalar;
                 g_res.setedge(row, col, new_val);
                 if (new_val != 0)
                     g_res.num_edges++;
@@ -148,6 +185,60 @@ namespace ariel
         }
 
         return g_res;
+    }
+
+    Graph &operator*=(Graph &g1, int scalar)
+    {
+        uint number_of_nodes = g1.get_num_of_nodes();
+        g1.num_edges = 0;
+        for (uint row = 0; row < number_of_nodes; row++)
+        {
+            for (uint col = 0; col < number_of_nodes; col++)
+            {
+                int new_val = g1.getedge(row, col) * scalar;
+                g1.setedge(row, col, new_val);
+                if (new_val != 0)
+                    g1.num_edges++;
+            }
+        }
+
+        return g1;
+    }
+
+    Graph operator/(const Graph &g1, int scalar)
+    {
+        uint number_of_nodes = g1.get_num_of_nodes();
+        Graph g_res{number_of_nodes};
+        for (uint row = 0; row < number_of_nodes; row++)
+        {
+            for (uint col = 0; col < number_of_nodes; col++)
+            {
+                int new_val = g1.getedge(row, col) / scalar;
+                g_res.setedge(row, col, new_val);
+                if (new_val != 0)
+                    g_res.num_edges++;
+            }
+        }
+
+        return g_res;
+    }
+
+    Graph &operator/=(Graph &g1, int scalar)
+    {
+         uint number_of_nodes = g1.get_num_of_nodes();
+         g1.num_edges = 0;
+        for (uint row = 0; row < number_of_nodes; row++)
+        {
+            for (uint col = 0; col < number_of_nodes; col++)
+            {
+                int new_val = g1.getedge(row, col) / scalar;
+                g1.setedge(row, col, new_val);
+                if (new_val != 0)
+                    g1.num_edges++;
+            }
+        }
+
+        return g1;
     }
 
     Graph &Graph::operator++(int dummy_flag)
@@ -239,7 +330,7 @@ namespace ariel
     {
         if (g1.nodes_num != g2.nodes_num)
         {
-            throw out_of_range("The + operation can only be used for graphs with the same number of nodes");
+            throw out_of_range("The - operation can only be used for graphs with the same number of nodes");
         }
         uint number_of_nodes = g1.nodes_num;
         Graph g_res(number_of_nodes);
@@ -255,6 +346,52 @@ namespace ariel
         }
 
         return g_res;
+    }
+    Graph operator*(const Graph &g1, const Graph &g2)
+    {
+        if (g1.nodes_num != g2.nodes_num)
+        {
+            throw out_of_range("The * operation can only be used for graphs with the same number of nodes");
+        }
+        uint number_of_nodes = g1.nodes_num;
+        Graph g_res(number_of_nodes);
+        for (uint row = 0; row < number_of_nodes; row++)
+        {
+            for (uint col = 0; col < number_of_nodes; col++)
+            {
+                int new_val = 0;
+                // matrix multiplication
+                for (uint j = 0; j < number_of_nodes; j++)
+                {
+                    new_val += g1.getedge(row, j) * g2.getedge(j, row);
+                }
+                g_res.setedge(row, col, new_val);
+                if (new_val != 0)
+                    g_res.num_edges++;
+            }
+        }
+
+        return g_res;
+    }
+    Graph &operator*=(Graph &g1, const Graph &g2)
+    {
+        if (g1.nodes_num != g2.nodes_num)
+        {
+            throw out_of_range("The * operation can only be used for graphs with the same number of nodes");
+        }
+        uint number_of_nodes = g1.nodes_num;
+        Graph gcpy = g1*g2;
+        g1.num_edges = gcpy.num_edges;
+        for (uint row = 0; row < number_of_nodes; row++)
+        {
+            for (uint col = 0; col < number_of_nodes; col++)
+            {
+                int new_val = gcpy.getedge(row,col);
+                g1.setedge(row,col,new_val);
+            }
+            
+        }
+        return g1;
     }
     Graph operator+(const Graph &g1)
     {
@@ -286,5 +423,41 @@ namespace ariel
         }
 
         return g_res;
+    }
+
+    bool operator<(const Graph &g1, const Graph &g2)
+    {
+        bool smallerthen;
+        smallerthen = g1.__contained_in(g2);
+        smallerthen |= (g1.num_edges < g2.num_edges);
+        smallerthen |= (g1.nodes_num < g2.nodes_num);
+        return smallerthen;
+    }
+
+    bool operator<=(const Graph &g1, const Graph &g2)
+    {
+        return g1 < g2 || g1 == g2;
+    }
+
+    bool operator>(const Graph &g1, const Graph &g2)
+    {
+        return g2 < g1;
+    }
+
+    bool operator>=(const Graph &g1, const Graph &g2)
+    {
+        return g1 > g2 || g1 == g2;
+    }
+
+    bool operator==(const Graph &g1, const Graph &g2)
+    {
+        uint number_of_nodes = g1.nodes_num;
+        bool ans = g1.__is_exact_equal(g2);
+        ans |= (!(g1 < g2) && !(g1 > g2));
+        return ans;
+    }
+
+    ostream &operator<<(ostream &os, const Graph &g){
+        return os;
     }
 }
