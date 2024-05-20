@@ -42,10 +42,10 @@ TEST_CASE("Test graph multiplication")
     g2.loadGraph(weightedGraph);
     ariel::Graph g4 = g1 * g2;
     vector<vector<int>> expectedGraph = {
-        {0, 0, 2},
-        {1, 0, 1},
-        {1, 0, 0}};
-    CHECK(g4.printGraph() == "[0, 0, 2]\n[1, 0, 1]\n[1, 0, 0]");
+        {1, 0, 2},
+        {1, 3, 1},
+        {1, 0, 2}};
+    CHECK(g4.printGraph() == "[1, 0, 2]\n[1, 3, 1]\n[1, 0, 2]");
 }
 
 TEST_CASE("Invalid operations")
@@ -58,9 +58,8 @@ TEST_CASE("Invalid operations")
     g1.loadGraph(graph);
     ariel::Graph g2;
     vector<vector<int>> weightedGraph = {
-        {0, 1, 1, 1},
-        {1, 0, 2, 1},
-        {1, 2, 0, 1}};
+        {8, 5},
+        {2, 0}};
     g2.loadGraph(weightedGraph);
     ariel::Graph g5;
     vector<vector<int>> graph2 = {

@@ -28,6 +28,7 @@ namespace ariel
         this->nodes_num = nodes;
         // this->actual_graph = (int *)malloc(nodes * nodes * sizeof(int));
         this->actual_graph = new int[nodes * nodes];
+        // std::fill(this->actual_graph,this->actual_graph+(nodes*nodes),0);
         if (this->actual_graph != NULL)
         {
             for (unsigned int row = 0; row < nodes; row++)
@@ -54,6 +55,7 @@ namespace ariel
         this->nodes_num = nodes;
         // this->actual_graph = (int *)malloc(nodes * nodes * sizeof(int));
         this->actual_graph = new int[nodes * nodes];
+        // std::fill(this->actual_graph,this->actual_graph+(nodes*nodes),0);
         if (this->actual_graph != NULL)
         {
             for (unsigned int row = 0; row < nodes; row++)
@@ -283,9 +285,29 @@ namespace ariel
         return *this;
     }
 
-    void Graph::printGraph() const
+    std::string Graph::printGraph() const
     {
-        cout << "Graph with " << this->nodes_num << " vertices and " << this->num_edges << " edges" << std::endl;
+        return this->create_graph_string();
+    }
+
+    std::string Graph::create_graph_string()const
+    {
+        uint number_of_nodes = this->nodes_num;
+        string str = "";
+        for (uint row = 0; row < number_of_nodes; row++)
+        {
+            str.append("[");
+            for (uint col = 0; col < number_of_nodes; col++)
+            {
+                str.append(to_string(this->getedge(row,col)));
+                if(col < number_of_nodes-1 )
+                str.append(", ");
+            }
+            str.append("]");
+            if(row < number_of_nodes-1 )
+            str.append("\n");
+        }
+        return str;
     }
 
     // creates an empty graph with param nodenum number of nodes
@@ -363,7 +385,7 @@ namespace ariel
                 // matrix multiplication
                 for (uint j = 0; j < number_of_nodes; j++)
                 {
-                    new_val += g1.getedge(row, j) * g2.getedge(j, row);
+                    new_val += g1.getedge(row, j) * g2.getedge(j, col);
                 }
                 g_res.setedge(row, col, new_val);
                 if (new_val != 0)
@@ -458,6 +480,9 @@ namespace ariel
     }
 
     ostream &operator<<(ostream &os, const Graph &g){
+        std::operator<<(os,'"');
+        std::operator<<(os,g.printGraph());
+        std::operator<<(os,'"');
         return os;
     }
 }

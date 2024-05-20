@@ -1,7 +1,8 @@
 // 206766677 Omer.Apter@msmail.ariel.ac.il
 #include <vector>
+#include <iostream>
 #pragma once
-
+// using namespace std;
 namespace ariel
 {
     class Graph
@@ -19,6 +20,7 @@ namespace ariel
         void setedge(unsigned int a, unsigned int b, int value);
         bool __is_exact_equal(const Graph &g2) const;
         bool __contained_in(const Graph &g2) const;
+        std::string create_graph_string() const;
 
     public:
         Graph()
@@ -33,22 +35,21 @@ namespace ariel
         void loadGraph(std::vector<std::vector<int>> g);
         // copy load
         void loadGraph(Graph g);
-        void printGraph() const;
-        string create_graph_string(int dummy);
+        std::string printGraph() const;
         // return the edge from a to b if exists else return 0
         int getedge(unsigned int row, unsigned int collumn) const;
         unsigned int get_num_of_nodes() const
         {
             return this->nodes_num;
         }
-        friend ostream &operator<<(ostream &os, const Graph &g);
+        friend std::ostream &operator<<(std::ostream &os, const Graph &g);
         // arithmetic
         friend Graph operator+(const Graph &g1, const Graph &g2);
         friend Graph operator-(const Graph &g1, const Graph &g2);
         Graph &operator+=(const Graph &g2);
         Graph &operator-=(const Graph &g2);
         friend Graph operator*(const Graph &g1, int scalar);
-        friend Graph &operator*=( Graph &g1, int scalar);
+        friend Graph &operator*=(Graph &g1, int scalar);
         friend Graph operator/(const Graph &g1, int scalar);
         friend Graph &operator/=(Graph &g1, int scalar);
         friend Graph operator*(const Graph &g1, const Graph &g2);
