@@ -46,7 +46,7 @@ namespace ariel
             for (unsigned int v = 0; v < g.get_num_of_nodes(); v++)
             {
                 // v in adj[u] when looking at g as an undirected
-                if (v != u && group[v] != group[u] && (g.getedge(u, v) != 0 || g.getedge(v, u) != 0))
+                if (v != u && group[v] != group[u] && (g.getEdge(u, v) != 0 || g.getEdge(v, u) != 0))
                 {
                     group[v] = group[u];
                     // queue push
@@ -84,7 +84,7 @@ namespace ariel
         while (v != start)
         {
             unsigned int u = prev[v];
-            if (d[v] != g.getedge(u, v) + d[u])
+            if (d[v] != g.getEdge(u, v) + d[u])
             {
                 v = (unsigned int)start;
                 out = "-1";
@@ -128,7 +128,7 @@ namespace ariel
             for (unsigned int v = 0; v < g.get_num_of_nodes(); v++)
             {
                 // v in adj[u] when looking at g as an undirected
-                if (v != u && (g.getedge(u, v) != 0 || g.getedge(v, u) != 0))
+                if (v != u && (g.getEdge(u, v) != 0 || g.getEdge(v, u) != 0))
                 {
                     if (color[u] == color[v])
                     {
@@ -203,7 +203,7 @@ namespace ariel
             {
                 for (unsigned int j = 0; j < g.get_num_of_nodes(); j++)
                 {
-                    if (g.getedge(i, j) != 0)
+                    if (g.getEdge(i, j) != 0)
                         relax(g, i, j, d, prev);
                 }
             }
@@ -214,8 +214,8 @@ namespace ariel
         {
             for (unsigned int j = 0; j < g.get_num_of_nodes(); j++)
             {
-                if (g.getedge(i, j) != 0)
-                    if (d[j] > d[i] + g.getedge(i, j))
+                if (g.getEdge(i, j) != 0)
+                    if (d[j] > d[i] + g.getEdge(i, j))
                         return -1;
             }
         }
@@ -223,9 +223,9 @@ namespace ariel
     }
     void relax(Graph &g, unsigned int edgefrom, unsigned int edgeto, int d[], unsigned int prev[])
     {
-        if (d[edgeto] > d[edgefrom] + g.getedge(edgefrom, edgeto))
+        if (d[edgeto] > d[edgefrom] + g.getEdge(edgefrom, edgeto))
         {
-            d[edgeto] = d[edgefrom] + g.getedge(edgefrom, edgeto);
+            d[edgeto] = d[edgefrom] + g.getEdge(edgefrom, edgeto);
             prev[edgeto] = edgefrom;
         }
     }
@@ -281,7 +281,7 @@ namespace ariel
         color[u] = GREY;
         for (unsigned int v = 0; v < g.get_num_of_nodes(); v++)
         {
-            if (v != u && g.getedge(u, v) != 0)
+            if (v != u && g.getEdge(u, v) != 0)
             {
                 if (color[v] == WHITE)
                 {

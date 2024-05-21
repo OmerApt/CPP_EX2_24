@@ -37,7 +37,7 @@ namespace ariel
         void loadGraph(Graph g);
         std::string printGraph() const;
         // return the edge from a to b if exists else return 0
-        int getedge(unsigned int row, unsigned int collumn) const;
+        int getEdge(unsigned int row, unsigned int collumn) const;
         unsigned int get_num_of_nodes() const
         {
             return this->nodes_num;
