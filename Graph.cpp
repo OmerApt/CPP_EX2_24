@@ -92,7 +92,7 @@ namespace ariel
         // need to check if parameters in range for safer code
         if (a >= nodes_num || b >= nodes_num)
         {
-            throw std::out_of_range("Node index out of range.");
+            throw std::invalid_argument("Node index out of range.");
         }
         this->actual_graph[this->nodes_num * a + b] = value;
     }
@@ -141,7 +141,7 @@ namespace ariel
         // need to check if parameters in range for safer code
         if (row >= nodes_num || collumn >= nodes_num)
         {
-            throw std::out_of_range("Node index out of range.");
+            throw std::invalid_argument("Node index out of range.");
         }
         return this->actual_graph[this->nodes_num * row + collumn];
     }
@@ -379,7 +379,7 @@ namespace ariel
     {
         if (g1.nodes_num != g2.nodes_num)
         {
-            throw out_of_range("The * operation can only be used for graphs with the same number of nodes");
+            throw invalid_argument("The * operation can only be used for graphs with the same number of nodes");
         }
         uint number_of_nodes = g1.nodes_num;
         Graph g_res(number_of_nodes);
