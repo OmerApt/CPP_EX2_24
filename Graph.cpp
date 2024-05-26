@@ -258,6 +258,11 @@ namespace ariel
     {
         uint number_of_nodes = g1.get_num_of_nodes();
         Graph g_res{number_of_nodes};
+        if (scalar == 0)
+        {
+            __throw_invalid_argument("cannot divide by zero");
+        }
+        
         for (uint row = 0; row < number_of_nodes; row++)
         {
             for (uint col = 0; col < number_of_nodes; col++)
