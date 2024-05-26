@@ -57,6 +57,7 @@ namespace ariel
                 }
             }
         }
+        this->graph_loaded = true;
     }
 
     // returns a copy of Graph. otherwise works the same
@@ -85,6 +86,7 @@ namespace ariel
                 }
             }
         }
+        this->graph_loaded = true;
     }
     // set the edge((a,b)) to be value.
     void Graph::setedge(unsigned int a, unsigned int b, int value)
